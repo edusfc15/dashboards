@@ -5,6 +5,7 @@ from components.choropleth_map import create_choropleth
 
 # Initialize Dash app
 app = dash.Dash(__name__)
+server = app.server 
 
 # Load data from CSV
 df = load_data()
