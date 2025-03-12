@@ -43,13 +43,35 @@ app.layout = html.Div(
             "Dashboard de Comércio Global - 2024",
             className="text-4xl font-bold text-gray-800 text-center mb-8"
         ),
+
+        # Grid Layout for Two Maps
         html.Div(
-            className="w-full max-w-6xl",
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-7xl",
             children=[
-                dcc.Graph(
-                    id='mapa-comercio',
-                    figure=create_choropleth(df) if df is not None else {},
-                    className="h-[700px] w-full"  # Makes the map bigger
+                # Choropleth Map
+                html.Div(
+                    className="bg-white p-4 shadow rounded-lg",
+                    children=[
+                        html.H2("Mapa Coroplético", className="text-xl font-semibold mb-2 text-center"),
+                        dcc.Graph(
+                            id='mapa-coropletico',
+                            figure=create_choropleth(df) if df is not None else {},
+                            className="h-[500px] w-full"
+                        )
+                    ]
+                ),
+                
+                # Proportional Symbol Map
+                html.Div(
+                    className="bg-white p-4 shadow rounded-lg",
+                    children=[
+                        html.H2("Mapa de Símbolos Proporcionais", className="text-xl font-semibold mb-2 text-center"),
+                        dcc.Graph(
+                            id='mapa-simbolos',
+                            figure=create_proportional_symbol_map(df) if df is not None else {},
+                            className="h-[500px] w-full"
+                        )
+                    ]
                 )
             ]
         )
