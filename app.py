@@ -2,12 +2,13 @@ import dash
 from dash import dcc, html
 from utils.data_loader import load_data
 from components.choropleth_map import create_choropleth
+from components.proportional_map import create_proportional_symbol_map
 
 # Initialize Dash app
 app = dash.Dash(__name__)
 server = app.server 
 
-# Load data from CSV
+# Load data
 df = load_data()
 
 # ✅ Corrected HTML Template for Dash
@@ -36,7 +37,7 @@ app.index_string = '''
 </html>
 '''
 
-# Create layout
+# ✅ Ensure maps are properly spaced and aligned
 app.layout = html.Div(
     className="bg-gray-100 min-h-screen flex flex-col items-center p-8",
     children=[
@@ -45,32 +46,32 @@ app.layout = html.Div(
             className="text-4xl font-bold text-gray-800 text-center mb-8"
         ),
 
-        # Grid Layout for Two Maps
+        # ✅ Use flex-col and add spacing between maps
         html.Div(
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-7xl",
+            className="flex flex-col gap-16 w-full max-w-7xl",  # Increased gap-16 for more space
             children=[
                 # Choropleth Map
                 html.Div(
-                    className="bg-white p-4 shadow rounded-lg",
+                    className="bg-white p-6 shadow-lg rounded-lg w-full min-h-[650px]",
                     children=[
-                        html.H2("Mapa Coroplético", className="text-xl font-semibold mb-2 text-center"),
+                        html.H2("Mapa Coroplético", className="text-xl font-semibold mb-4 text-center"),
                         dcc.Graph(
                             id='mapa-coropletico',
                             figure=create_choropleth(df) if df is not None else {},
-                            className="h-[500px] w-full"
+                            className="h-[600px] w-full"
                         )
                     ]
                 ),
                 
-                # Proportional Symbol Map
+                # ✅ Extra margin to fix clipping issue
                 html.Div(
-                    className="bg-white p-4 shadow rounded-lg",
+                    className="bg-white p-6 shadow-lg rounded-lg w-full min-h-[650px] mt-10",
                     children=[
-                        html.H2("Mapa de Símbolos Proporcionais", className="text-xl font-semibold mb-2 text-center"),
+                        html.H2("Mapa de Símbolos Proporcionais", className="text-xl font-semibold mb-4 text-center"),
                         dcc.Graph(
                             id='mapa-simbolos',
                             figure=create_proportional_symbol_map(df) if df is not None else {},
-                            className="h-[500px] w-full"
+                            className="h-[600px] w-full"
                         )
                     ]
                 )

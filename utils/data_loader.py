@@ -6,17 +6,17 @@ def load_data(csv_file="data/comercio_bilateral_2024.csv"):
     try:
         df = pd.read_csv(csv_file, sep=";", dtype={"CO_ANO": str, "CORRENTE": str, "RANK": str})
 
-        # Print raw data before processing
-        print("Raw Data from CSV:\n", df.head())
+        # Remove dots from numbers and convert to float
+        df["CORRENTE"] = df["CORRENTE"].str.replace(".", "", regex=False)
+        df["CORRENTE"] = pd.to_numeric(df["CORRENTE"], errors="coerce")  # Convert invalid values to NaN
 
-        df["CORRENTE"] = df["CORRENTE"].str.replace(".", "", regex=False)  # Remove dots
-        df["CORRENTE"] = pd.to_numeric(df["CORRENTE"], errors="coerce")
-        df["RANK"] = pd.to_numeric(df["RANK"], errors="coerce")
+        df["RANK"] = pd.to_numeric(df["RANK"], errors="coerce")  # Convert to int (NaN if empty)
 
+        # Map country names to ISO Alpha-3 codes
         df["ISO_ALPHA"] = df["NO_PAIS"].apply(get_iso_alpha_3)
 
-        # Print processed data to check if everything is correct
-        print("Processed Data:\n", df.head())
+        # ✅ Fix: Remove rows where CORRENTE or ISO_ALPHA is NaN
+        df = df.dropna(subset=["CORRENTE", "ISO_ALPHA"])
 
         return df
     except Exception as e:

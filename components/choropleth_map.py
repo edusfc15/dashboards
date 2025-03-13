@@ -19,7 +19,6 @@ def create_choropleth(df):
 
     fig.update_layout(
         height=700,
-        width=1200,
         margin={"r": 0, "t": 40, "l": 0, "b": 0},
         hoverlabel=dict(
             bgcolor="white",  # Background color of tooltip
